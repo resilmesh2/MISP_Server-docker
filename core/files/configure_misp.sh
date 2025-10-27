@@ -11,7 +11,7 @@ export SETTING_CONTACT="${MISP_CONTACT-$ADMIN_EMAIL}"
 export SETTING_EMAIL="${MISP_EMAIL-$ADMIN_EMAIL}"
 
 init_minimum_config() {
-    # Temporarily disable DB to apply config file settings, reenable after if needed 
+    # Temporarily disable DB to apply config file settings, reenable after if needed
     sudo -u www-data /var/www/MISP/app/Console/cake Admin setSetting -q "MISP.system_setting_db" false
     init_settings "minimum_config"
 }

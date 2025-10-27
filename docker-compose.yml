@@ -10,6 +10,9 @@ services:
       - "SMARTHOST_PASSWORD=${SMARTHOST_PASSWORD}"
       - "SMARTHOST_ALIASES=${SMARTHOST_ALIASES}"
 
+    networks:
+      resilmesh_network:
+
   redis:
     image: valkey/valkey:7.2
     command: |
@@ -33,12 +36,16 @@ services:
           fi
         '
       interval: 2s
-      timeout: 1s
+      timeout: 10s
       retries: 3
-      start_period: 5s
-      start_interval: 5s
+      start_period: 30s
+#      start_interval: 30s
     volumes:
       - cache_data:/data:Z
+
+    networks:
+      resilmesh_network:
+
 
   db:
     # We use MariaDB because it supports ARM and has the expected collations
@@ -65,10 +72,13 @@ services:
     healthcheck:
       test: mysqladmin --user=$$MYSQL_USER --password=$$MYSQL_PASSWORD status
       interval: 2s
-      timeout: 1s
+      timeout: 10s
       retries: 3
       start_period: 30s
-      start_interval: 5s
+#      start_interval: 30s
+
+    networks:
+      resilmesh_network:
 
   misp-core:
     image: ghcr.io/misp/misp-docker/misp-core:${CORE_RUNNING_TAG:-latest}
@@ -106,7 +116,7 @@ services:
       timeout: 1s
       retries: 3
       start_period: 30s
-      start_interval: 30s
+#      start_interval: 30s
     ports:
       - "${CORE_HTTP_PORT:-80}:80"
       - "${CORE_HTTPS_PORT:-443}:443"
@@ -120,6 +130,10 @@ services:
       # - "${CUSTOM_PATH}/:/custom/:Z"
       # mount custom ca root certificates
       # - "./rootca.pem:/usr/local/share/ca-certificates/rootca.crt:Z"
+
+    networks:
+      resilmesh_network:
+
     environment:
       - "BASE_URL=${BASE_URL}"
       - "CRON_USER_ID=${CRON_USER_ID}"
@@ -295,17 +309,19 @@ services:
         - MODULES_FLAVOR=${MODULES_FLAVOR:-full}
     healthcheck:
       test: "/bin/bash -c '</dev/tcp/localhost/6666'"
-      interval: 2s
-      timeout: 1s
+      interval: 30s
+      timeout: 10s
       retries: 3
-      start_period: 5s
-      start_interval: 5s
+      start_period: 30s
+ #     start_interval: 30s
     volumes:
       # custom MISP modules are loaded at startup time
       - "./custom/action_mod/:/custom/action_mod/:Z"
       - "./custom/expansion/:/custom/expansion/:Z"
       - "./custom/export_mod/:/custom/export_mod/:Z"
       - "./custom/import_mod/:/custom/import_mod/:Z"
+    networks:
+      resilmesh_network:
 
   misp-guard:
     profiles:
@@ -331,8 +347,15 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-      
+    networks:
+      resilmesh_network:
 
 volumes:
     mysql_data:
     cache_data:
+
+networks:
+  resilmesh_network:
+#    external: true
+    driver: bridge
+    name: resilmesh_network_misp
