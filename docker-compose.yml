@@ -13,40 +13,6 @@ services:
     networks:
       resilmesh_network:
 
-  redis:
-    image: valkey/valkey:7.2
-    command: |
-      sh -c '
-        if [ "$${ENABLE_REDIS_EMPTY_PASSWORD:-false}" = "true" ]; then
-          exec valkey-server
-        else
-          exec valkey-server --requirepass "$${REDIS_PASSWORD:-redispassword}"
-        fi
-      '
-    environment:
-      - "ENABLE_REDIS_EMPTY_PASSWORD=${ENABLE_REDIS_EMPTY_PASSWORD:-false}"
-      - "REDIS_PASSWORD=${REDIS_PASSWORD:-redispassword}"
-    healthcheck:
-      test: |
-        sh -c '
-          if [ "$${ENABLE_REDIS_EMPTY_PASSWORD:-false}" = "true" ]; then
-            valkey-cli -p $${REDIS_PORT:-6379} ping | grep -q PONG || exit 1
-          else
-            valkey-cli -a "$${REDIS_PASSWORD:-redispassword}" -p $${REDIS_PORT:-6379} ping | grep -q PONG || exit 1
-          fi
-        '
-      interval: 2s
-      timeout: 10s
-      retries: 3
-      start_period: 30s
-#      start_interval: 30s
-    volumes:
-      - cache_data:/data:Z
-
-    networks:
-      resilmesh_network:
-
-
   db:
     # We use MariaDB because it supports ARM and has the expected collations
     image: mariadb:10.11
@@ -104,8 +70,6 @@ services:
           - PYPI_SETUPTOOLS_VERSION=${PYPI_SETUPTOOLS_VERSION}
           - PYPI_SUPERVISOR_VERSION=${PYPI_SUPERVISOR_VERSION}
     depends_on:
-      redis:
-        condition: service_healthy
       db:
         condition: service_healthy
       misp-modules:
@@ -263,6 +227,7 @@ services:
       - "REDIS_PORT=${REDIS_PORT:-6379}"
       - "REDIS_PASSWORD=${REDIS_PASSWORD:-redispassword}"
       - "ENABLE_REDIS_EMPTY_PASSWORD=${ENABLE_REDIS_EMPTY_PASSWORD:-false}"
+      - "REDIS_DATABASE=0"
       # debug setting 
       - "DEBUG=${DEBUG}"
       # SMTP setting
@@ -356,6 +321,5 @@ volumes:
 
 networks:
   resilmesh_network:
-#    external: true
-    driver: bridge
-    name: resilmesh_network_misp
+    external: true
+    name: resilmesh_network
