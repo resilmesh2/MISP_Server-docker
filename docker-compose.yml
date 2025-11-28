@@ -225,9 +225,10 @@ services:
       # redis settings
       - "REDIS_HOST=${REDIS_HOST:-redis}"
       - "REDIS_PORT=${REDIS_PORT:-6379}"
-      - "REDIS_PASSWORD=${REDIS_PASSWORD:-redispassword}"
-      - "ENABLE_REDIS_EMPTY_PASSWORD=${ENABLE_REDIS_EMPTY_PASSWORD:-false}"
+      - "REDIS_PASSWORD="
+      - "ENABLE_REDIS_EMPTY_PASSWORD=true"
       - "REDIS_DATABASE=0"
+      - "REDIS_BACKUP_DB=13"
       # debug setting 
       - "DEBUG=${DEBUG}"
       # SMTP setting
