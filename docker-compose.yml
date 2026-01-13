@@ -46,7 +46,7 @@ services:
     networks:
       resilmesh_network:
 
-  misp-core:
+  resilmesh_tap_misp-core:
     image: ghcr.io/misp/misp-docker/misp-core:${CORE_RUNNING_TAG:-latest}
     cap_add:
       - AUDIT_WRITE
@@ -299,7 +299,7 @@ services:
         - GUARD_TAG=${GUARD_TAG:?Missing or outdated .env file, see README.md for instructions}
         - GUARD_COMMIT=${GUARD_COMMIT}
     depends_on:
-      - misp-core
+      - resilmesh_tap_misp-core
     ports:
       - "${GUARD_PORT:-8888}:${GUARD_PORT:-8888}"
     environment:

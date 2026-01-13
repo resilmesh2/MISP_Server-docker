@@ -6,7 +6,7 @@ Requires=misp-redis.service misp-db.service misp-modules.service
 [Container]
 AutoUpdate=registry
 HostName=misp-core
-ContainerName=misp-core
+ContainerName=resilmesh_tap_misp-core
 AddCapability=AUDIT_WRITE
 Image=ghcr.io/misp/misp-docker/misp-core:latest
 PublishPort=10443:443
