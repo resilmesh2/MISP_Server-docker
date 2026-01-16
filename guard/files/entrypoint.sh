@@ -16,7 +16,7 @@ set -e
 
 # resolve misp-core from docker dns
 if [ -z "$MISP_IP" ]; then
-  MISP_IP=$(getent hosts resilmesh_tap_misp-core | awk '{print $1}')
+  MISP_IP=$(getent hosts resilmesh-tap-misp-core | awk '{print $1}')
 fi
 
 # replace runtime ip into config.json
