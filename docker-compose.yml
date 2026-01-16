@@ -1,7 +1,8 @@
 services:
   # This is capable to relay via gmail, Amazon SES, or generic relays
   # See: https://hub.docker.com/r/ixdotai/smtp
-  mail:
+  resilmesh-tap-misp-mail:
+    container_name: resilmesh-tap-misp-mail
     image: ixdotai/smtp
     environment:
       - "SMARTHOST_ADDRESS=${SMARTHOST_ADDRESS}"
@@ -13,7 +14,8 @@ services:
     networks:
       resilmesh_network:
 
-  db:
+  resilmesh-tap-misp-db:
+    container_name: resilmesh-tap-misp-db
     # We use MariaDB because it supports ARM and has the expected collations
     image: mariadb:10.11
     restart: always
@@ -47,6 +49,7 @@ services:
       resilmesh_network:
 
   resilmesh-tap-misp-core:
+    container_name: resilmesh-tap-misp-core
     image: ghcr.io/misp/misp-docker/misp-core:${CORE_RUNNING_TAG:-latest}
     cap_add:
       - AUDIT_WRITE
@@ -70,9 +73,9 @@ services:
           - PYPI_SETUPTOOLS_VERSION=${PYPI_SETUPTOOLS_VERSION}
           - PYPI_SUPERVISOR_VERSION=${PYPI_SUPERVISOR_VERSION}
     depends_on:
-      db:
+      resilmesh-tap-misp-db:
         condition: service_healthy
-      misp-modules:
+      resilmesh-tap-misp-modules:
         condition: service_healthy
     healthcheck:
       test: curl -ks https://localhost:443/users/heartbeat > /dev/null || exit 1
@@ -217,7 +220,7 @@ services:
           "pull": true
         }
       # mysql settings
-      - "MYSQL_HOST=${MYSQL_HOST:-db}"
+      - "MYSQL_HOST=${MYSQL_HOST:-resilmesh-tap-misp-db}"
       - "MYSQL_PORT=${MYSQL_PORT:-3306}"
       - "MYSQL_USER=${MYSQL_USER:-misp}"
       - "MYSQL_PASSWORD=${MYSQL_PASSWORD:-example}"
@@ -232,7 +235,9 @@ services:
       # debug setting 
       - "DEBUG=${DEBUG}"
       # SMTP setting
-      - "SMTP_FQDN=${SMTP_FQDN}"
+      - "SMTP_FQDN=${SMTP_FQDN:-resilmesh-tap-misp-mail}"
+      # Modules setting
+      - "MISP_MODULES_FQDN=${MISP_MODULES_FQDN:-http://resilmesh-tap-misp-modules}"
       # NGINX settings
       - "FASTCGI_READ_TIMEOUT=${FASTCGI_READ_TIMEOUT:-300s}"
       - "FASTCGI_SEND_TIMEOUT=${FASTCGI_SEND_TIMEOUT:-300s}"
@@ -265,7 +270,8 @@ services:
       - "X_FRAME_OPTIONS=${X_FRAME_OPTIONS}"
       - "CONTENT_SECURITY_POLICY=${CONTENT_SECURITY_POLICY}"
 
-  misp-modules:
+  resilmesh-tap-misp-modules:
+    container_name: resilmesh-tap-misp-modules
     image: ghcr.io/misp/misp-docker/misp-modules:${MODULES_RUNNING_TAG:-latest}
     build:
       context: modules/.
@@ -289,7 +295,8 @@ services:
     networks:
       resilmesh_network:
 
-  misp-guard:
+  resilmesh-tap-misp-guard:
+    container_name: resilmesh-tap-misp-guard
     profiles:
       - misp-guard
     image: ghcr.io/misp/misp-docker/misp-guard:${GUARD_RUNNING_TAG:-latest}
