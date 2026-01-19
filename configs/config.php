@@ -5,7 +5,7 @@ $config = array (
   array (
     'system_setting_db' => false,
     'python_bin' => '/usr/local/bin/python3',
-    'redis_host' => 'redis',
+    'redis_host' => 'resilmesh-redis',
     'redis_password' => '',
     'redis_port' => 6379,
     'attachments_dir' => '/var/www/MISP/app/files',
@@ -16,7 +16,7 @@ $config = array (
     'menu_custom_right_link_html' => '',
     'online_version_check' => true,
     'osuser' => 'www-data',
-    'redis_database' => 0,
+    'redis_database' => 6,
     'self_update' => false,
     'tmpdir' => '/var/www/MISP/app/tmp',
     'baseurl' => 'https://51.92.10.245:10443',
@@ -112,7 +112,7 @@ $config = array (
   ),
   'Plugin' => 
   array (
-    'ZeroMQ_redis_host' => 'redis',
+    'ZeroMQ_redis_host' => 'resilmesh-redis',
     'ZeroMQ_redis_password' => '',
     'ZeroMQ_redis_port' => 6379,
     'ZeroMQ_enable' => false,
@@ -144,7 +144,7 @@ $config = array (
   ),
   'SimpleBackgroundJobs' => 
   array (
-    'redis_host' => 'redis',
+    'redis_host' => 'resilmesh-redis',
     'redis_password' => '',
     'redis_port' => 6379,
     'supervisor_host' => '127.0.0.1',
@@ -152,7 +152,7 @@ $config = array (
     'supervisor_user' => 'supervisor',
     'enabled' => true,
     'max_job_history_ttl' => 86400,
-    'redis_database' => 1,
+    'redis_database' => 6,
     'redis_namespace' => 'background_jobs',
     'supervisor_port' => 9001,
   ),

@@ -230,7 +230,7 @@ services:
       - "REDIS_PORT=${REDIS_PORT:-6379}"
       - "REDIS_PASSWORD="
       - "ENABLE_REDIS_EMPTY_PASSWORD=true"
-      - "REDIS_DATABASE=0"
+      - "REDIS_DATABASE=6"
       - "REDIS_BACKUP_DB=13"
       # debug setting 
       - "DEBUG=${DEBUG}"

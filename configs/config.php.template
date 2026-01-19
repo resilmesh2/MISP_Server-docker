@@ -140,10 +140,10 @@ $config = array(
     ),
     'SimpleBackgroundJobs' => array(
         'enabled' => false,
-        'redis_host' => 'localhost',
+        'redis_host' => 'resilmesh-redis',
         'redis_port' => 6379,
         'redis_password' => '',
-        'redis_database' => 1,
+        'redis_database' => 6,
         'redis_namespace' => 'background_jobs',
         'max_job_history_ttl' => 86400,
         'supervisor_host' => 'localhost',
