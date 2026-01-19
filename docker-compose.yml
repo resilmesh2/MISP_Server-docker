@@ -226,7 +226,7 @@ services:
       - "MYSQL_PASSWORD=${MYSQL_PASSWORD:-example}"
       - "MYSQL_DATABASE=${MYSQL_DATABASE:-misp}"
       # redis settings
-      - "REDIS_HOST=${REDIS_HOST:-redis}"
+      - "REDIS_HOST=${REDIS_HOST:-resilmesh-redis}"
       - "REDIS_PORT=${REDIS_PORT:-6379}"
       - "REDIS_PASSWORD="
       - "ENABLE_REDIS_EMPTY_PASSWORD=true"
