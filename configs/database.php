@@ -32,7 +32,7 @@ class DATABASE_CONFIG {
     public $default = [
         'datasource' => 'Database/MysqlObserverExtended',
         'persistent' => false,
-        'host' => 'db',
+        'host' => 'resilmesh-tap-misp-db',
         'login' => 'misp',
         'port' => 3306,
         'password' => 'example',
